@@ -5,6 +5,7 @@ from .models import Task
 from .serializer import Task_Serializer, Task_detail_serializer  # Create this serializer in serializers.py
 
 
+
 class Task_List(APIView):
     
     def get(self, request):
@@ -52,3 +53,14 @@ class Task_Detail(APIView):
             print(error)
             return Response({"Error":f"{error}"}, status=status.HTTP_400_BAD_REQUEST)
         
+    def delete(self, request, task_id):
+        try:
+            try :
+                task = Task.objects.get(id=task_id)
+            except Task.DoesNotExist:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            task.delete()
+            return Response({"success":"data successfully deleted"}, status=status.HTTP_200_OK)
+        except Exception as error :
+            print(error)
+            return Response({"Error":f"{error}"}, status=status.HTTP_400_BAD_REQUEST)
